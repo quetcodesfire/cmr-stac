@@ -125,7 +125,7 @@ function cmrGranToFeatureGeoJSON (event, cmrGran) {
 
   return {
     type: 'Feature',
-    // stac_version: settings.stac.version,
+    stac_version: settings.stac.version,
     id: cmrGran.id,
     collection: cmrGran.collection_concept_id,
     geometry: cmrSpatialToGeoJSONGeometry(cmrGran),
@@ -175,7 +175,7 @@ function cmrGranulesToFeatureCollection (event, cmrGrans, currPageNumber) {
 
     return {
       type: 'FeatureCollection',
-      // stac_version: settings.stac.version,
+      stac_version: settings.stac.version,
       features: cmrGrans.map(g => cmrGranToFeatureGeoJSON(event, g)),
       links: {
         self: generateSelfUrl(event),
