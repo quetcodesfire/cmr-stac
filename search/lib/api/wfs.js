@@ -2,6 +2,7 @@ const express = require('express');
 const { wfs, generateAppUrl, logger } = require('../util');
 const cmr = require('../cmr');
 const convert = require('../convert');
+const settings = require('../settings');
 const { generateAppUrlWithoutRelativeRoot, extractParam, generateSelfUrl } = require('../util');
 
 async function getCollections (request, response) {
@@ -42,6 +43,7 @@ async function getGranules (request, response) {
 
   const granulesResponse = {
     type: 'FeatureCollection',
+    stac_version: settings.stac.version,
     features: granules.map(gran => convert.cmrGranToFeatureGeoJSON(event, gran)),
     links: [
       {
