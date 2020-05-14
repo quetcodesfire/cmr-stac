@@ -4,7 +4,7 @@ const settings = require('../settings');
 const { pointStringToPoints, parseOrdinateString } = require('./bounding-box');
 const { generateAppUrl, generateAppUrlWithoutRelativeRoot, wfs, extractParam, generateSelfUrl } = require('../util');
 
-console.log(settings)
+console.log(settings.stac.version);
 
 function cmrPolygonToGeoJsonPolygon (polygon) {
   const rings = polygon.map((ringStr) => pointStringToPoints(ringStr));
