@@ -183,6 +183,11 @@ describe('granuleToItem', () => {
     it('should return a FeatureGeoJSON from a cmrGran', () => {
       expect(cmrGranToFeatureGeoJSON(event, cmrGran)).toEqual({
         type: 'Feature',
+        stac_version: '0.8.0',
+        license: {
+          name: 'Apache License 2.0',
+          url: 'http://www.apache.org/licenses/LICENSE-2.0'
+        },
         id: 1,
         bbox: undefined,
         collection: 10,
@@ -263,6 +268,11 @@ describe('granuleToItem', () => {
             end_datetime: '1'
           },
           type: 'Feature',
+          stac_version: '0.8.0',
+          license: {
+            name: 'Apache License 2.0',
+            url: 'http://www.apache.org/licenses/LICENSE-2.0'
+          },
           assets: {
             metadata: {
               href: 'https://cmr.earthdata.nasa.gov/search/concepts/1.xml',
