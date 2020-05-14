@@ -1,8 +1,10 @@
 const _ = require('lodash');
 const cmr = require('../cmr');
-// const settings = require('../settings');
+const settings = require('../settings');
 const { pointStringToPoints, parseOrdinateString } = require('./bounding-box');
 const { generateAppUrl, generateAppUrlWithoutRelativeRoot, wfs, extractParam, generateSelfUrl } = require('../util');
+
+console.log(settings)
 
 function cmrPolygonToGeoJsonPolygon (polygon) {
   const rings = polygon.map((ringStr) => pointStringToPoints(ringStr));
@@ -83,13 +85,13 @@ function cmrGranToFeatureGeoJSON (event, cmrGran) {
       return {
         href: l.href,
         type: l.type
-      }
+      };
     } else {
       return {
         name: l.title,
         href: l.href,
         type: l.type
-      }
+      };
     }
   };
 
@@ -123,7 +125,7 @@ function cmrGranToFeatureGeoJSON (event, cmrGran) {
 
   return {
     type: 'Feature',
-    // stac_version = settings.stac.version,
+    // stac_version: settings.stac.version,
     id: cmrGran.id,
     collection: cmrGran.collection_concept_id,
     geometry: cmrSpatialToGeoJSONGeometry(cmrGran),
@@ -173,7 +175,7 @@ function cmrGranulesToFeatureCollection (event, cmrGrans, currPageNumber) {
 
     return {
       type: 'FeatureCollection',
-      // stac_version = settings.stac.version,
+      // stac_version: settings.stac.version,
       features: cmrGrans.map(g => cmrGranToFeatureGeoJSON(event, g)),
       links: {
         self: generateSelfUrl(event),
