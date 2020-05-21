@@ -37,24 +37,83 @@ async function getGranules (request, response) {
   const currPage = parseInt(extractParam(event.queryStringParameters, 'page_num', '1'), 10);
   const nextPage = currPage + 1;
   const newParams = { ...event.queryStringParameters } || {};
+  const newPrevParams = { ...event.queryStringParameters } || {};
   newParams.page_num = nextPage;
+  const prevResultsLink = generateAppUrlWithoutRelativeRoot(event, event.path, newPrevParams);
   const nextResultsLink = generateAppUrlWithoutRelativeRoot(event, event.path, newParams);
 
-  const granulesResponse = {
-    type: 'FeatureCollection',
-    features: granules.map(gran => convert.cmrGranToFeatureGeoJSON(event, gran)),
-    links: [
-      {
-        rel: 'self',
-        href: generateSelfUrl(event)
-      },
-      {
-        rel: 'next',
-        href: nextResultsLink
-      }
-    ]
-  };
-  response.status(200).json(granulesResponse);
+  const features = granules.map(gran => convert.cmrGranToFeatureGeoJSON(event, gran));
+  console.log('features length', features.length);
+  console.log(currPage);
+  if (features.length < 10 && currPage === 1) {
+    const granulesResponse = {
+      type: 'FeatureCollection',
+      features,
+      links: [
+        {
+          rel: 'self',
+          href: generateSelfUrl(event)
+        }
+      ]
+    };
+    console.log('response 1', granulesResponse);
+    response.status(200).json(granulesResponse);
+  } else if (features.length < 10 && currPage > 1) {
+    const granulesResponse = {
+      type: 'FeatureCollection',
+      features,
+      links: [
+        {
+          rel: 'self',
+          href: generateSelfUrl(event)
+        },
+        {
+          rel: 'prev',
+          href: prevResultsLink
+        }
+      ]
+    };
+    console.log('response 2', granulesResponse);
+    response.status(200).json(granulesResponse);
+  } else if (currPage > 1) {
+    const granulesResponse = {
+      type: 'FeatureCollection',
+      features,
+      links: [
+        {
+          rel: 'self',
+          href: generateSelfUrl(event)
+        },
+        {
+          rel: 'prev',
+          href: prevResultsLink
+        },
+        {
+          rel: 'next',
+          href: nextResultsLink
+        }
+      ]
+    };
+    console.log('response 3', granulesResponse);
+    response.status(200).json(granulesResponse);
+  } else {
+    const granulesResponse = {
+      type: 'FeatureCollection',
+      features,
+      links: [
+        {
+          rel: 'self',
+          href: generateSelfUrl(event)
+        },
+        {
+          rel: 'next',
+          href: nextResultsLink
+        }
+      ]
+    };
+    console.log('response 4', granulesResponse);
+    response.status(200).json(granulesResponse);
+  }
 }
 
 async function getGranule (request, response) {
